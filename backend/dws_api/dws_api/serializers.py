@@ -12,3 +12,6 @@ class WalletSerializer(serializers.ModelSerializer):
         if Wallet.objects.filter(email=value).exists():
             raise serializers.ValidationError("The email address is already connected to another wallet.")
         return value
+
+class TransactionSerializer(serializers.Serializer):
+    amount = serializers.FloatField()
