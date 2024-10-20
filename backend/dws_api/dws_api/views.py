@@ -13,6 +13,17 @@ def create_wallet(request, format = None):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error message": serializer.errors.get("email")[0]},status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def check_balance(request, id, format = None):
+    #check the balance of wallet
+    try:
+        wallet = Wallet.objects.get(pk = id)
+        serializer = WalletSerializer(wallet)
+        return Response({'balance':serializer.data.get('balance')}, status=status.HTTP_200_OK)
+    except Wallet.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)

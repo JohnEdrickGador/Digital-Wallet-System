@@ -20,5 +20,6 @@ from dws_api import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('create_account/', views.create_wallet)
+    path('create_account/', views.create_wallet),
+    path('check_balance/<int:id>', views.check_balance)
 ]
