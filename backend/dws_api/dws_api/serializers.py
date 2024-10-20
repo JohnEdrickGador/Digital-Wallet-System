@@ -5,4 +5,4 @@ from .models import Wallet
 class WalletSerializer(serializers.ModelSerializer):
     class Meta:
         model = Wallet
-        fields = ['id', 'first_name', 'last_name', 'balance', 'date_created']
+        fields = ['id', 'first_name', 'last_name', 'email', 'balance', 'date_created']
