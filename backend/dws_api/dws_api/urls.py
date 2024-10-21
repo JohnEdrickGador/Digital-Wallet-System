@@ -16,7 +16,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from dws_api import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # path('list_wallets/', views.list_wallets),
+    path('create_wallet/', views.create_wallet),
+    path('check_balance/<str:username>', views.check_balance),
+    path('deposit/<str:username>', views.deposit),
+    path('debit/<str:username>', views.debit),
+    path('signup/', views.signup),
+    path('login/', views.login),
+    path('logout/', views.logout)
 ]
