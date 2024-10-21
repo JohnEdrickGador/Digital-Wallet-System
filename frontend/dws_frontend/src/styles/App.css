@@ -1,5 +1,7 @@
-* {
-  box-sizing: border-box;
+html, body {
+  height: 100%; /* Ensure the container takes the full height of the screen */
   margin: 0;
-  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
