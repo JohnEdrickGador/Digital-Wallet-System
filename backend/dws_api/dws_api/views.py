@@ -26,14 +26,7 @@ def check_balance(request, id, format = None):
         serializer = WalletSerializer(wallet)
         return Response({'balance':serializer.data.get('balance')}, status=status.HTTP_200_OK)
     except Wallet.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    
-# @api_view(['GET'])
-# def list_wallets(request, format = None):
-#     if request.method == 'GET':
-#         wallets = Wallet.objects.all()
-#         serializer = WalletSerializer(wallets, many=True)
-#         return Response(serializer.data)
+        return Response(status=status.HTTP_404_NOT_FOUND)  
 
 @api_view(["PUT"])
 def deposit(request, id, format = None):
@@ -77,3 +70,9 @@ def debit(request, id, format = None):
     except Wallet.DoesNotExist:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+# @api_view(['GET'])
+# def list_wallets(request, format = None):
+#     if request.method == 'GET':
+#         wallets = Wallet.objects.all()
+#         serializer = WalletSerializer(wallets, many=True)
+#         return Response(serializer.data)
