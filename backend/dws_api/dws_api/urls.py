@@ -21,8 +21,11 @@ from dws_api import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path('list_wallets/', views.list_wallets),
-    path('create_account/', views.create_wallet),
-    path('check_balance/<int:id>', views.check_balance),
-    path('deposit/<int:id>', views.deposit),
-    path('debit/<int:id>', views.debit),
+    path('create_wallet/', views.create_wallet),
+    path('check_balance/<str:username>', views.check_balance),
+    path('deposit/<str:username>', views.deposit),
+    path('debit/<str:username>', views.debit),
+    path('signup/', views.signup),
+    path('login/', views.login),
+    path('logout/', views.logout)
 ]
