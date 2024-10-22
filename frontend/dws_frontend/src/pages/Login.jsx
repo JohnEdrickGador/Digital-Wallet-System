@@ -60,7 +60,8 @@ export default function Login() {
     const data = await response.json();
 
     //save the auth token to localstorage
-    localStorage.setItem('authToken', data.token);
+    localStorage.setItem('dwsUser', JSON.stringify(data.details.user));
+    localStorage.setItem('authToken', data.details.token);
     navigate('/wallet');
 
     } catch (error) {
