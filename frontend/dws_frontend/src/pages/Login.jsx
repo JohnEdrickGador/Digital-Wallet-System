@@ -61,10 +61,7 @@ export default function Login() {
 
     //save the auth token to localstorage
     localStorage.setItem('authToken', data.token);
-    console.log(localStorage.getItem('authToken'));
-    console.log("Logged In")
     navigate('/wallet');
-    console.log('should navigate to /wallet')
 
     } catch (error) {
       console.log(error);
@@ -74,16 +71,19 @@ export default function Login() {
   }
 
   return (
-    <form className='login-container' onSubmit={handleLogin}>
-        <div className="title-container">
-            <h2>Digital Wallet System</h2>
-        </div>
-        <TextField id="outlined-basic" label="Email Address" variant="outlined" onChange={emailChangeHandler}/>
-        <TextField id="outlined-basic" label="Password" variant="outlined" type='password' onChange={passwordChangeHandler}/>
-        <div className="login-btn-container">
-            <Button variant="contained" type='submit'>Sign in</Button>
-            <Button variant="outlined">Create an Account</Button>
-        </div>
-    </form>
+    <div className='login-page'>
+      <form className='login-container' onSubmit={handleLogin}>
+          <div className="title-container">
+              <h2>Digital Wallet System</h2>
+          </div>
+          <TextField id="outlined-basic" label="Email Address" variant="outlined" onChange={emailChangeHandler}/>
+          <TextField id="outlined-basic" label="Password" variant="outlined" type='password' onChange={passwordChangeHandler}/>
+          <div className="login-btn-container">
+              <Button variant="contained" type='submit'>Sign in</Button>
+              <Button variant="outlined">Create an Account</Button>
+          </div>
+      </form>    
+    </div>
+
   )
 }
