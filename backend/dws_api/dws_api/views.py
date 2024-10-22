@@ -152,6 +152,21 @@ def logout(request):
     except Token.DoesNotExist:
         return Response({"error": "Token not found"}, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['GET'])
+@authentication_classes([SessionAuthentication, BearerAuthentication])
+@permission_classes([IsAuthenticated])
+def get_wallet_details(request, username, format = None):
+    #check the balance of wallet
+    try:
+        wallet = Wallet.objects.get(username = username)
+        serializer = WalletSerializer(wallet)
+        user = request.user
+        if user.username == wallet.username and user.email == wallet.email:
+            return Response({'wallet':serializer.data}, status=status.HTTP_200_OK)
+        else:
+            return Response({"error message": "Provided details does not match the authenticated user"}, status= status.HTTP_403_FORBIDDEN)
+    except Wallet.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 # @api_view(['GET'])
 # def list_wallets(request, format = None):
