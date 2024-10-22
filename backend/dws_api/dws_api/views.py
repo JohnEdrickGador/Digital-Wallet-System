@@ -12,6 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from .authenticate import BearerAuthentication
 
+from .services import wrap_response
 
 @api_view(['POST'])
 @authentication_classes([SessionAuthentication, BearerAuthentication])
@@ -24,14 +25,18 @@ def create_wallet(request, format = None):
         if serializer.is_valid():
             #check if details are similar to that of the logged in user
             if user.email != request.data.get('email') and user.username != request.data.get('username'):
-                return Response({"error message": "Provided details does not match the authenticated user"}, status= status.HTTP_403_FORBIDDEN)
+                response = wrap_response(403, "Provided details does not match the authenticated user")
+                return Response(response, status= status.HTTP_403_FORBIDDEN)
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            response = wrap_response(201, "Wallet created successfully", {"wallet": serializer.data})
+            return Response(response, status=status.HTTP_201_CREATED)
         else:
             if serializer.errors.get("email"):
-                return Response({"error message": serializer.errors.get("email")[0] },status=status.HTTP_400_BAD_REQUEST)
+                response = wrap_response(400, serializer.errors.get("email")[0])
+                return Response(response,status=status.HTTP_400_BAD_REQUEST)
             elif serializer.errors.get("username"):
-                return Response({"error message": serializer.errors.get("username")[0] },status=status.HTTP_400_BAD_REQUEST)
+                response = wrap_response(400, serializer.errors.get("username")[0])
+                return Response(response, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -45,11 +50,14 @@ def check_balance(request, username, format = None):
         serializer = WalletSerializer(wallet)
         user = request.user
         if user.username == wallet.username and user.email == wallet.email:
-            return Response({'balance':serializer.data.get('balance')}, status=status.HTTP_200_OK)
+            response = wrap_response(200, "Wallet balance retrieved", {'balance':serializer.data.get('balance')})
+            return Response(response, status=status.HTTP_200_OK)
         else:
-            return Response({"error message": "Provided details does not match the authenticated user"}, status= status.HTTP_403_FORBIDDEN)
+            response = wrap_response(403, "Provided details does not match the authenticated user")
+            return Response(response, status= status.HTTP_403_FORBIDDEN)
     except Wallet.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)  
+        response = wrap_response(400, "No wallet found")
+        return Response(response, status=status.HTTP_404_NOT_FOUND)  
 
 @api_view(["PUT"])
 @authentication_classes([SessionAuthentication, BearerAuthentication])
@@ -68,9 +76,11 @@ def deposit(request, username, format = None):
                 wallet.save()
 
                 serializer = WalletSerializer(wallet)
-                return Response(serializer.data, status=status.HTTP_200_OK)
+                response = wrap_response(200, "Deposit is successful", {"wallet": serializer.data})
+                return Response(response, status=status.HTTP_200_OK)
             else:
-                return Response({"error message": "Provided details does not match the authenticated user"}, status= status.HTTP_403_FORBIDDEN)
+                response = wrap_response(403, "Provided details does not match the authenticated user")
+                return Response(response, status= status.HTTP_403_FORBIDDEN)
         
         return Response(transaction_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     except Wallet.DoesNotExist:
@@ -89,18 +99,23 @@ def debit(request, username, format = None):
         if transaction_serializer.is_valid():
             if user.email == wallet.email and user.username == wallet.username:
                 amount = transaction_serializer.validated_data['amount']
-                if wallet.balance < amount: 
-                    return Response({'error message': "Insufficient Balance"}, status=status.HTTP_400_BAD_REQUEST)
+                if wallet.balance < amount:
+                    response = wrap_response(400, "Insufficient Balance") 
+                    return Response(response, status=status.HTTP_400_BAD_REQUEST)
                 wallet.balance -= amount
                 wallet.save()
 
                 serializer = WalletSerializer(wallet)
-                return Response(serializer.data, status=status.HTTP_200_OK)
+                response = wrap_response(200, "Withdrawal is successful", {"wallet": serializer.data})
+                return Response(response, status=status.HTTP_200_OK)
             else:
-                return Response({"error message": "Provided details does not match the authenticated user"}, status= status.HTTP_403_FORBIDDEN)              
-        return Response(transaction_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                response = wrap_response(403, "Provided details does not match the authenticated user")
+                return Response(response, status= status.HTTP_403_FORBIDDEN)
+        response = wrap_response(400, "Invalid payload")              
+        return Response(response, status=status.HTTP_400_BAD_REQUEST)
     except Wallet.DoesNotExist:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        response = wrap_response(400, "Wallet does not exist")
+        return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["POST"])
 @authentication_classes([])
@@ -118,9 +133,11 @@ def signup(request, format = None):
         
         #generate token
         token = Token.objects.create(user = user)
-        return Response({"token": token.key}, status=status.HTTP_201_CREATED)
+        response = wrap_response(201, "Account created successfully", {"token": token.key})
+        return Response(response, status=status.HTTP_201_CREATED)
     else:
-        return Response("Invalid sign up", status=status.HTTP_400_BAD_REQUEST)
+        response = wrap_response(400, "Invalid sign up")
+        return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["POST"])
 @authentication_classes([])
@@ -129,15 +146,18 @@ def login(request):
     try:
         user = get_object_or_404(User, email = request.data['email'])
     except:
-        return Response("User not found", status=status.HTTP_404_NOT_FOUND)
+        response = wrap_response(404, "User not found")
+        return Response(response, status=status.HTTP_404_NOT_FOUND)
 
     #check if password is incorrect
     if not user.check_password(request.data['password']):
-        return Response("Wrong Password", status=status.HTTP_403_FORBIDDEN)
+        response = wrap_response(403, "Wrong Password")
+        return Response(response, status=status.HTTP_403_FORBIDDEN)
     
     token, created = Token.objects.get_or_create(user = user)
     serializer = UserSerializer(user)
-    return Response({'message': 'Successful Login', 'token': token.key, "user": serializer.data}, status=status.HTTP_200_OK)
+    response = wrap_response(200, 'Logged in successfully', {'token': token.key, 'user': serializer.data})
+    return Response(response, status=status.HTTP_200_OK)
 
 @api_view(["POST"])
 @authentication_classes([TokenAuthentication])  # Require the token to be sent
@@ -148,9 +168,11 @@ def logout(request):
         token = Token.objects.get(user=request.user)
         # Delete the token, effectively logging out the user
         token.delete()
-        return Response({"message": "Successfully logged out"}, status=status.HTTP_200_OK)
+        response = wrap_response(200, "Logged out successfully")
+        return Response(response, status=status.HTTP_200_OK)
     except Token.DoesNotExist:
-        return Response({"error": "Token not found"}, status=status.HTTP_400_BAD_REQUEST)
+        response = wrap_response(400, "token does not exist")
+        return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 @authentication_classes([SessionAuthentication, BearerAuthentication])
@@ -162,11 +184,14 @@ def get_wallet_details(request, username, format = None):
         serializer = WalletSerializer(wallet)
         user = request.user
         if user.username == wallet.username and user.email == wallet.email:
-            return Response({'wallet':serializer.data}, status=status.HTTP_200_OK)
+            response = wrap_response(200, "Wallet successfully retrieved", {'wallet': serializer.data})
+            return Response(response, status=status.HTTP_200_OK)
         else:
-            return Response({"error message": "Provided details does not match the authenticated user"}, status= status.HTTP_403_FORBIDDEN)
+            response = wrap_response(403, "Provided details does not match the authenticated user")
+            return Response(response, status= status.HTTP_403_FORBIDDEN)
     except Wallet.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        response = wrap_response(404, "Wallet does not exist")
+        return Response(response, status=status.HTTP_404_NOT_FOUND)
 
 # @api_view(['GET'])
 # def list_wallets(request, format = None):
