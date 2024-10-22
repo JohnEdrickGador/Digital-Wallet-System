@@ -1,0 +1,97 @@
+{
+  "hash": "08b08c78",
+  "configHash": "684cc9b1",
+  "lockfileHash": "fe61fbdb",
+  "browserHash": "61b880e6",
+  "optimized": {
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "8a10712c",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "7be0bb00",
+      "needsInterop": true
+    },
+    "react-router-dom": {
+      "src": "../../node_modules/react-router-dom/dist/index.js",
+      "file": "react-router-dom.js",
+      "fileHash": "ac6f50ba",
+      "needsInterop": false
+    },
+    "@emotion/react": {
+      "src": "../../node_modules/@emotion/react/dist/emotion-react.browser.development.esm.js",
+      "file": "@emotion_react.js",
+      "fileHash": "f7b67dba",
+      "needsInterop": false
+    },
+    "@mui/material/styles": {
+      "src": "../../node_modules/@mui/material/styles/index.js",
+      "file": "@mui_material_styles.js",
+      "fileHash": "b14f8f06",
+      "needsInterop": false
+    },
+    "@mui/material/TextField": {
+      "src": "../../node_modules/@mui/material/TextField/index.js",
+      "file": "@mui_material_TextField.js",
+      "fileHash": "4a60cecf",
+      "needsInterop": false
+    },
+    "@mui/material/Button": {
+      "src": "../../node_modules/@mui/material/Button/index.js",
+      "file": "@mui_material_Button.js",
+      "fileHash": "f8a418b3",
+      "needsInterop": false
+    },
+    "@mui/material/AppBar": {
+      "src": "../../node_modules/@mui/material/AppBar/index.js",
+      "file": "@mui_material_AppBar.js",
+      "fileHash": "b9383679",
+      "needsInterop": false
+    },
+    "@mui/material/Toolbar": {
+      "src": "../../node_modules/@mui/material/Toolbar/index.js",
+      "file": "@mui_material_Toolbar.js",
+      "fileHash": "ac2820fc",
+      "needsInterop": false
+    },
+    "@mui/material/Typography": {
+      "src": "../../node_modules/@mui/material/Typography/index.js",
+      "file": "@mui_material_Typography.js",
+      "fileHash": "0edece2a",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-ISSBNTGQ": {
+      "file": "chunk-ISSBNTGQ.js"
+    },
+    "chunk-SB3MFAIJ": {
+      "file": "chunk-SB3MFAIJ.js"
+    },
+    "chunk-5UN2WQEG": {
+      "file": "chunk-5UN2WQEG.js"
+    },
+    "chunk-LF45252Z": {
+      "file": "chunk-LF45252Z.js"
+    },
+    "chunk-SEJPFKP4": {
+      "file": "chunk-SEJPFKP4.js"
+    },
+    "chunk-7SJJL7KN": {
+      "file": "chunk-7SJJL7KN.js"
+    },
+    "chunk-AHJQGFMT": {
+      "file": "chunk-AHJQGFMT.js"
+    },
+    "chunk-LHY6C7GY": {
+      "file": "chunk-LHY6C7GY.js"
+    },
+    "chunk-AK4TLUUY": {
+      "file": "chunk-AK4TLUUY.js"
+    }
+  }
+}
