@@ -1,10 +1,20 @@
 import React, {useState, useEffect} from 'react'
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errorAlert, setErrorAlert] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem('authToken')) {
+        console.log("Login > Wallet")
+        navigate('/wallet')
+    }
+  }, [])
 
   const emailChangeHandler = (e) => {
     setEmail(e.target.value)
@@ -18,6 +28,7 @@ export default function Login() {
     e.preventDefault()
     if (!email || !password) {
       alert("Please enter an email address and a password");
+      setErrorAlert(true)
       return;
     }
 
@@ -48,10 +59,12 @@ export default function Login() {
 
     const data = await response.json();
 
-    console.log(data)
-
     //save the auth token to localstorage
     localStorage.setItem('authToken', data.token);
+    console.log(localStorage.getItem('authToken'));
+    console.log("Logged In")
+    navigate('/wallet');
+    console.log('should navigate to /wallet')
 
     } catch (error) {
       console.log(error);
