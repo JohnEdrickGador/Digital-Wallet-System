@@ -28,6 +28,7 @@ export default function Login() {
 
     const loginEndpoint = 'http://127.0.0.1:8000/login/'
 
+    //submit the requestBody to the api login endpoint
     try {
       const response = await fetch(loginEndpoint, {
         method: 'POST',
@@ -38,14 +39,23 @@ export default function Login() {
       }
     )
 
-    if (!response.body) {
-      console.log(response)
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      console.log(errorMessage);
+      alert(`Login failed: ${errorMessage}`)
+      return;
     }
 
-    console.log(response)
+    const data = await response.json();
+
+    console.log(data)
+
+    //save the auth token to localstorage
+    localStorage.setItem('authToken', data.token);
 
     } catch (error) {
-      console.log(error)
+      console.log(error);
+      alert("An unexpected error occurred. Please try again.");
     }
 
   }
