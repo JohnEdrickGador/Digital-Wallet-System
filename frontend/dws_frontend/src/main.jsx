@@ -5,6 +5,7 @@ import './styles/App.css'
 import './styles/login.css'
 import './styles/appbar.css'
 import './styles/wallet.css'
+import './styles/signup.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

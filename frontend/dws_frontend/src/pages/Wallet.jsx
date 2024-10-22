@@ -209,14 +209,18 @@ export default function Wallet() {
             <div className="wallet-container">
                 {isWallet && wallet ? <WalletCard wallet={wallet}/> : <Button variant="contained" onClick={createWallet}>Create a wallet</Button>}
             </div>
+            {
+                isWallet && wallet ? 
 
-            <div className="txn-container">
+                <div className="txn-container">
                 <TextField id="outlined-basic" label="Amount" variant="outlined" type="number" className='amount-field' onChange={amountChangeHandler} value={txnAmount}/>
                 <div className="txn-btn-container">
                     <Button variant="contained" onClick={deposit}>Cash In</Button>
                     <Button variant="outlined" onClick={debit}>Withdraw</Button>    
                 </div>
-            </div>
+                </div> : <></>
+            }
+
             
             
         </div>
