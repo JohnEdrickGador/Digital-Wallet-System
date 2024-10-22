@@ -27,5 +27,6 @@ urlpatterns = [
     path('debit/<str:username>', views.debit),
     path('signup/', views.signup),
     path('login/', views.login),
-    path('logout/', views.logout)
+    path('logout/', views.logout),
+    path('get_wallet/<str:username>', views.get_wallet_details)
 ]
