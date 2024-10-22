@@ -5,6 +5,7 @@ import Authentication from "./pages/Authentication"
 import Wallet from "./pages/Wallet"
 import { ThemeProvider } from "@emotion/react"
 import theme from "./components/Theme"
+import SignUp from "./pages/SignUp"
 
 function App() {
   const [authenticated, setAuthenticated] = useState(false)
@@ -24,6 +25,7 @@ function App() {
         <Route path = "/" element = {<Authentication/>} />
         <Route path = "/login" element = {<Login />} />
         <Route path = "/wallet" element = {<Wallet />} />
+        <Route path = "/signup" element = {<SignUp />} />
       </Routes>
     </BrowserRouter>
     </ThemeProvider>

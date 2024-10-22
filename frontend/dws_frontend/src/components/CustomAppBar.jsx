@@ -31,6 +31,7 @@ export default function CustomAppBar() {
 
       if (data) {
         localStorage.removeItem('authToken');
+        localStorage.removeItem('dwsUser');
         navigate('/');
       }
     } catch (error) {
