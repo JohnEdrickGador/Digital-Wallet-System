@@ -55,6 +55,8 @@ export default function SignUp() {
         const data = await response.json();
 
         alert("Account created successfully")
+        localStorage.setItem('dwsUser', JSON.stringify(data.details.user))
+        localStorage.setItem('authToken',data.details.token)
         navigate('/login')
     
         } catch (error) {

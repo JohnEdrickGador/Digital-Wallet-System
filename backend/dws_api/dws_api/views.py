@@ -56,7 +56,7 @@ def check_balance(request, username, format = None):
             response = wrap_response(403, "Provided details does not match the authenticated user")
             return Response(response, status= status.HTTP_403_FORBIDDEN)
     except Wallet.DoesNotExist:
-        response = wrap_response(400, "No wallet found")
+        response = wrap_response(404, "No wallet found")
         return Response(response, status=status.HTTP_404_NOT_FOUND)  
 
 @api_view(["PUT"])
@@ -81,10 +81,11 @@ def deposit(request, username, format = None):
             else:
                 response = wrap_response(403, "Provided details does not match the authenticated user")
                 return Response(response, status= status.HTTP_403_FORBIDDEN)
-        
-        return Response(transaction_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        response = wrap_response(400, "Invalid payload")              
+        return Response(response, status=status.HTTP_400_BAD_REQUEST)
     except Wallet.DoesNotExist:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        response = wrap_response(404, "Wallet does not exist")
+        return Response(response, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(["PUT"])
 @authentication_classes([SessionAuthentication, BearerAuthentication])
@@ -133,7 +134,7 @@ def signup(request, format = None):
         
         #generate token
         token = Token.objects.create(user = user)
-        response = wrap_response(201, "Account created successfully", {"token": token.key})
+        response = wrap_response(201, "Account created successfully", {"user": serializer.data, "token": token.key})
         return Response(response, status=status.HTTP_201_CREATED)
     else:
         response = wrap_response(400, "Invalid sign up")
